@@ -418,6 +418,7 @@ class MicrosoftGraphServer {
 
           try {
             if (req.microsoftAuth) {
+              await this.authManager.setOAuthToken(req.microsoftAuth.accessToken);
               await requestContext.run(
                 {
                   accessToken: req.microsoftAuth.accessToken,
@@ -467,6 +468,7 @@ class MicrosoftGraphServer {
 
           try {
             if (req.microsoftAuth) {
+              await this.authManager.setOAuthToken(req.microsoftAuth.accessToken);
               await requestContext.run(
                 {
                   accessToken: req.microsoftAuth.accessToken,
@@ -513,6 +515,7 @@ class MicrosoftGraphServer {
           };
           try {
             if (req.microsoftAuth) {
+              await this.authManager.setOAuthToken(req.microsoftAuth.accessToken);
               await requestContext.run({ accessToken: req.microsoftAuth.accessToken, refreshToken: req.microsoftAuth.refreshToken }, handler);
             } else {
               await handler();
@@ -542,6 +545,7 @@ class MicrosoftGraphServer {
           };
           try {
             if (req.microsoftAuth) {
+              await this.authManager.setOAuthToken(req.microsoftAuth.accessToken);
               await requestContext.run({ accessToken: req.microsoftAuth.accessToken, refreshToken: req.microsoftAuth.refreshToken }, handler);
             } else {
               await handler();
