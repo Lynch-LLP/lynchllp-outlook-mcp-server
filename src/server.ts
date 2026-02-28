@@ -284,6 +284,13 @@ class MicrosoftGraphServer {
           microsoftAuthUrl.searchParams.set('scope', 'User.Read Files.Read Mail.Read');
         }
 
+        // Always include offline_access so Microsoft returns a refresh_token.
+        // MCP clients (Claude) reject the token response if no refresh_token is present.
+        const currentScope = microsoftAuthUrl.searchParams.get('scope') || '';
+        if (!currentScope.includes('offline_access')) {
+          microsoftAuthUrl.searchParams.set('scope', `${currentScope} offline_access`);
+        }
+
         // Redirect to Microsoft's authorization page
         res.redirect(microsoftAuthUrl.toString());
       });
