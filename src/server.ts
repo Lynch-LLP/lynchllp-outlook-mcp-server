@@ -380,12 +380,12 @@ class MicrosoftGraphServer {
         }
       });
 
-      app.use(
-        mcpAuthRouter({
-          provider: oauthProvider,
-          issuerUrl: new URL(`http://localhost:${port}`),
-        })
-      );
+      // NOTE: mcpAuthRouter from the SDK is intentionally not used here.
+      // We implement a full custom OAuth proxy flow (register/authorize/token)
+      // that returns real Microsoft access tokens. The SDK's auth router
+      // intercepts /mcp requests and rejects Microsoft tokens because they
+      // don't match the SDK's expected issuer. Auth is handled instead by
+      // microsoftBearerTokenAuthMiddleware on the /mcp routes below.
 
       // Microsoft Graph MCP endpoints with bearer token auth
       // Handle both GET and POST methods as required by MCP Streamable HTTP specification
