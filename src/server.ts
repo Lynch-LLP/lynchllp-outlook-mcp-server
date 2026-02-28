@@ -502,10 +502,67 @@ class MicrosoftGraphServer {
         }
       );
 
-      // Health check endpoint
-      app.get('/', (req, res) => {
-        res.send('Microsoft 365 MCP Server is running');
-      });
+      // Root path MCP handlers — Claude uses the base URL as the MCP endpoint
+      // so we need to serve MCP at both / and /mcp
+      app.get(
+        '/',
+        microsoftBearerTokenAuthMiddleware,
+        async (
+          req: Request & { microsoftAuth?: { accessToken: string; refreshToken: string } },
+          res: Response
+        ) => {
+          console.log('[MCP] GET / called, has auth:', !!req.microsoftAuth);
+          const handler = async () => {
+            const server = this.createMcpServer();
+            const transport = new StreamableHTTPServerTransport({
+              sessionIdGenerator: undefined,
+            });
+            res.on('close', () => { transport.close(); });
+            await server.connect(transport);
+            await transport.handleRequest(req as any, res as any, undefined);
+          };
+          try {
+            if (req.microsoftAuth) {
+              await requestContext.run({ accessToken: req.microsoftAuth.accessToken, refreshToken: req.microsoftAuth.refreshToken }, handler);
+            } else {
+              await handler();
+            }
+          } catch (error) {
+            logger.error('Error handling MCP GET / request:', error);
+            if (!res.headersSent) res.status(500).json({ jsonrpc: '2.0', error: { code: -32603, message: 'Internal server error' }, id: null });
+          }
+        }
+      );
+
+      app.post(
+        '/',
+        microsoftBearerTokenAuthMiddleware,
+        async (
+          req: Request & { microsoftAuth?: { accessToken: string; refreshToken: string } },
+          res: Response
+        ) => {
+          console.log('[MCP] POST / called, has auth:', !!req.microsoftAuth);
+          const handler = async () => {
+            const server = this.createMcpServer();
+            const transport = new StreamableHTTPServerTransport({
+              sessionIdGenerator: undefined,
+            });
+            res.on('close', () => { transport.close(); });
+            await server.connect(transport);
+            await transport.handleRequest(req as any, res as any, req.body);
+          };
+          try {
+            if (req.microsoftAuth) {
+              await requestContext.run({ accessToken: req.microsoftAuth.accessToken, refreshToken: req.microsoftAuth.refreshToken }, handler);
+            } else {
+              await handler();
+            }
+          } catch (error) {
+            logger.error('Error handling MCP POST / request:', error);
+            if (!res.headersSent) res.status(500).json({ jsonrpc: '2.0', error: { code: -32603, message: 'Internal server error' }, id: null });
+          }
+        }
+      );
 
       if (host) {
         app.listen(port, host, () => {
