@@ -19,4 +19,5 @@ COPY --from=builder /app/package*.json ./
 ENV NODE_ENV=production
 RUN npm i --ignore-scripts --omit=dev
 
-ENTRYPOINT ["node", "dist/index.js"]
+# Use shell form so ${PORT:-3000} is expanded at runtime
+CMD node dist/index.js --http ${PORT:-3000}

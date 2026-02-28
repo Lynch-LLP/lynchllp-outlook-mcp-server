@@ -47,9 +47,12 @@ export class MicrosoftOAuthProvider extends ProxyOAuthServerProvider {
         }
       },
       getClient: async (client_id: string) => {
+        // Return empty redirect_uris to allow any redirect URI from MCP clients.
+        // The actual redirect_uri validation is done by Microsoft Azure AD when
+        // the code is exchanged for tokens at the /token endpoint.
         return {
           client_id,
-          redirect_uris: ['http://localhost:3000/callback'],
+          redirect_uris: [],
         };
       },
     });
