@@ -14,6 +14,15 @@ export const microsoftBearerTokenAuthMiddleware = (
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    // RFC 9728 / MCP OAuth spec: 401 must include WWW-Authenticate pointing to
+    // the protected resource metadata so clients (e.g. Claude Desktop) can
+    // discover the authorization server and initiate the OAuth flow.
+    const proto = (req.headers['x-forwarded-proto'] as string) || (req.secure ? 'https' : 'http');
+    const baseUrl = `${proto}://${req.get('host')}`;
+    res.set(
+      'WWW-Authenticate',
+      `Bearer resource_metadata="${baseUrl}/.well-known/oauth-protected-resource"`
+    );
     res.status(401).json({ error: 'Missing or invalid access token' });
     return;
   }
