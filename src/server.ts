@@ -130,7 +130,7 @@ class MicrosoftGraphServer {
   }
 
   async start(): Promise<void> {
-    if (this.options.v) {
+    if (this.options.v || this.options.http) {
       enableConsoleLogging();
     }
 
