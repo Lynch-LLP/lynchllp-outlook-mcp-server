@@ -243,6 +243,13 @@ class MicrosoftGraphServer {
         const url = new URL(req.url!, `${req.protocol}://${req.get('host')}`);
         const tenantId = this.secrets?.tenantId || 'common';
         const clientId = this.secrets!.clientId;
+        // Log the full authorize request so we can see what redirect_uri the MCP client sends
+        logger.info('AUTHORIZE REQUEST', {
+          redirect_uri: url.searchParams.get('redirect_uri'),
+          client_id: url.searchParams.get('client_id'),
+          scope: url.searchParams.get('scope'),
+          full_url: req.url,
+        });
         const cloudEndpoints = getCloudEndpoints(this.secrets!.cloudType);
         const microsoftAuthUrl = new URL(
           `${cloudEndpoints.authority}/${tenantId}/oauth2/v2.0/authorize`
