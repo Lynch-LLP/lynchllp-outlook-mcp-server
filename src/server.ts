@@ -156,12 +156,6 @@ class MicrosoftGraphServer {
       app.use(express.json());
       app.use(express.urlencoded({ extended: true }));
 
-      // Global request logger — log every inbound request
-      app.use((req, _res, next) => {
-        console.log(`[REQ] ${req.method} ${req.path} auth:${!!req.headers.authorization}`);
-        next();
-      });
-
       // Add CORS headers for all routes
       const corsOrigin = process.env.MS365_MCP_CORS_ORIGIN || '*';
       app.use((req, res, next) => {
@@ -356,7 +350,6 @@ class MicrosoftGraphServer {
               body.code_verifier as string | undefined,
               this.secrets!.cloudType
             );
-            console.log('[TOKEN] Exchange succeeded, token_type:', result.token_type, 'scope:', result.scope, 'has_refresh_token:', !!result.refresh_token);
             res.json(result);
           } else if (body.grant_type === 'refresh_token') {
             const tenantId = this.secrets?.tenantId || 'common';
@@ -409,7 +402,6 @@ class MicrosoftGraphServer {
           req: Request & { microsoftAuth?: { accessToken: string; refreshToken: string } },
           res: Response
         ) => {
-          console.log('[MCP] GET /mcp called, has auth:', !!req.microsoftAuth);
           const handler = async () => {
             const server = this.createMcpServer();
             const transport = new StreamableHTTPServerTransport({
@@ -459,7 +451,6 @@ class MicrosoftGraphServer {
           req: Request & { microsoftAuth?: { accessToken: string; refreshToken: string } },
           res: Response
         ) => {
-          console.log('[MCP] POST /mcp called, has auth:', !!req.microsoftAuth, 'body type:', typeof req.body);
           const handler = async () => {
             const server = this.createMcpServer();
             const transport = new StreamableHTTPServerTransport({
@@ -511,7 +502,6 @@ class MicrosoftGraphServer {
           req: Request & { microsoftAuth?: { accessToken: string; refreshToken: string } },
           res: Response
         ) => {
-          console.log('[MCP] GET / called, has auth:', !!req.microsoftAuth);
           const handler = async () => {
             const server = this.createMcpServer();
             const transport = new StreamableHTTPServerTransport({
@@ -541,7 +531,6 @@ class MicrosoftGraphServer {
           req: Request & { microsoftAuth?: { accessToken: string; refreshToken: string } },
           res: Response
         ) => {
-          console.log('[MCP] POST / called, has auth:', !!req.microsoftAuth);
           const handler = async () => {
             const server = this.createMcpServer();
             const transport = new StreamableHTTPServerTransport({
