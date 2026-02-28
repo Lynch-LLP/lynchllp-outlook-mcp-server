@@ -343,6 +343,7 @@ class MicrosoftGraphServer {
               body.code_verifier as string | undefined,
               this.secrets!.cloudType
             );
+            console.log('[TOKEN] Exchange succeeded, token_type:', result.token_type, 'scope:', result.scope, 'has_refresh_token:', !!result.refresh_token);
             res.json(result);
           } else if (body.grant_type === 'refresh_token') {
             const tenantId = this.secrets?.tenantId || 'common';
@@ -395,6 +396,7 @@ class MicrosoftGraphServer {
           req: Request & { microsoftAuth?: { accessToken: string; refreshToken: string } },
           res: Response
         ) => {
+          console.log('[MCP] GET /mcp called, has auth:', !!req.microsoftAuth);
           const handler = async () => {
             const server = this.createMcpServer();
             const transport = new StreamableHTTPServerTransport({
@@ -444,6 +446,7 @@ class MicrosoftGraphServer {
           req: Request & { microsoftAuth?: { accessToken: string; refreshToken: string } },
           res: Response
         ) => {
+          console.log('[MCP] POST /mcp called, has auth:', !!req.microsoftAuth, 'body type:', typeof req.body);
           const handler = async () => {
             const server = this.createMcpServer();
             const transport = new StreamableHTTPServerTransport({
