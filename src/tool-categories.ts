@@ -24,14 +24,16 @@ export const TOOL_CATEGORIES: Record<string, ToolCategory> = {
   personal: {
     name: 'personal',
     pattern:
-      /mail|calendar|drive|contact|todo|onenote|attachment|draft|event|file|folder|search|query/i,
+      /mail|calendar|drive|contact|todo|onenote|attachment|draft|event|file|folder|search|query|people|insight|mailbox|category/i,
     description:
-      'Personal productivity tools (mail, calendar, files, contacts, tasks, notes, search)',
+      'Personal productivity tools (mail, calendar, files, contacts, tasks, notes, search, people, insights)',
   },
   work: {
     name: 'work',
-    pattern: /team|channel|chat|sharepoint|planner|site|list|shared|search|query/i,
-    description: 'Organization/work tools (Teams, SharePoint, shared mailboxes, search)',
+    pattern:
+      /team|channel|chat|sharepoint|planner|site|list|shared|search|query|meeting|presence|place|room|subscription|group/i,
+    description:
+      'Organization/work tools (Teams, SharePoint, shared mailboxes, search, meetings, presence)',
     requiresOrgMode: true,
   },
   excel: {
@@ -61,8 +63,38 @@ export const TOOL_CATEGORIES: Record<string, ToolCategory> = {
   },
   users: {
     name: 'users',
-    pattern: /user|list-users/i,
-    description: 'User directory access',
+    pattern: /user|list-users|manager|direct-report|photo|membership/i,
+    description: 'User directory and profile access',
+    requiresOrgMode: true,
+  },
+  presence: {
+    name: 'presence',
+    pattern: /presence|status-message/i,
+    description: 'User presence and status management',
+    requiresOrgMode: true,
+  },
+  meetings: {
+    name: 'meetings',
+    pattern: /meeting|online-meeting|attendance/i,
+    description: 'Online meetings management',
+    requiresOrgMode: true,
+  },
+  groups: {
+    name: 'groups',
+    pattern: /group/i,
+    description: 'Microsoft 365 group operations',
+    requiresOrgMode: true,
+  },
+  places: {
+    name: 'places',
+    pattern: /room|place/i,
+    description: 'Room and place directory',
+    requiresOrgMode: true,
+  },
+  sharepoint: {
+    name: 'sharepoint',
+    pattern: /sharepoint|site|list/i,
+    description: 'SharePoint site and list operations',
     requiresOrgMode: true,
   },
   all: {
