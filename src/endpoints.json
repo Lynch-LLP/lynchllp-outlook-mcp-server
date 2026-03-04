@@ -132,35 +132,35 @@
     "method": "post",
     "toolName": "reply-mail-message",
     "scopes": ["Mail.Send"],
-    "llmTip": "Reply to an email preserving full HTML formatting. The 'comment' field is your reply text. Do NOT reconstruct the email manually."
+    "llmTip": "Reply to an email and send immediately. Use the 'comment' field with HTML for your reply — it supports full HTML rendering AND automatically appends the thread. Do NOT use Message.body (wipes thread). Do NOT reconstruct the email manually."
   },
   {
     "pathPattern": "/me/messages/{message-id}/replyAll",
     "method": "post",
     "toolName": "reply-all-mail-message",
     "scopes": ["Mail.Send"],
-    "llmTip": "Reply-all preserving full HTML formatting. The 'comment' field is your reply text."
+    "llmTip": "Reply-all to an email and send immediately. Use the 'comment' field with HTML for your reply — it supports full HTML rendering AND automatically appends the thread. Do NOT use Message.body (wipes thread). Do NOT reconstruct the email manually."
   },
   {
     "pathPattern": "/me/messages/{message-id}/createForward",
     "method": "post",
     "toolName": "create-forward-draft",
     "scopes": ["Mail.ReadWrite"],
-    "llmTip": "Create a forward draft (does not send). CRITICAL: Do NOT use the Comment field — it only supports plain text. ALWAYS use the Message object with body.contentType set to 'html' for rich formatted content. Example: { \"Message\": { \"toRecipients\": [{\"emailAddress\":{\"address\":\"user@example.com\"}}], \"body\": { \"contentType\": \"html\", \"content\": \"<p>Your <strong>formatted</strong> note here</p>\" } } }. The original message content is automatically included."
+    "llmTip": "Create a forward draft (does not send). PREFERRED APPROACH: Use the 'Comment' field with HTML — it supports full HTML rendering AND automatically appends the original message thread. Do NOT use Message.body, as it replaces the entire body and wipes the thread. Example: { \"Comment\": \"<p>Your <strong>formatted</strong> note here</p>\", \"Message\": { \"toRecipients\": [{\"emailAddress\":{\"address\":\"user@example.com\"}}] } }."
   },
   {
     "pathPattern": "/me/messages/{message-id}/createReply",
     "method": "post",
     "toolName": "create-reply-draft",
     "scopes": ["Mail.ReadWrite"],
-    "llmTip": "Create a reply draft (does not send). CRITICAL: Do NOT use the Comment field — it only supports plain text. ALWAYS use the Message object with body.contentType set to 'html' for rich formatted replies. Example: { \"Message\": { \"body\": { \"contentType\": \"html\", \"content\": \"<p>Your <strong>formatted</strong> reply here</p>\" } } }. The full HTML email thread is automatically included below your reply."
+    "llmTip": "Create a reply draft (does not send). PREFERRED APPROACH: Use the 'Comment' field with HTML — it supports full HTML rendering (bold, italics, links all work) AND automatically appends the full original thread with Outlook separator. Do NOT use Message.body, as it replaces the entire body and wipes the thread. Example: { \"Comment\": \"<p>Your <strong>formatted</strong> reply here</p>\" }."
   },
   {
     "pathPattern": "/me/messages/{message-id}/createReplyAll",
     "method": "post",
     "toolName": "create-reply-all-draft",
     "scopes": ["Mail.ReadWrite"],
-    "llmTip": "Create a reply-all draft (does not send). CRITICAL: Do NOT use the Comment field — it only supports plain text. ALWAYS use the Message object with body.contentType set to 'html' for rich formatted replies. Example: { \"Message\": { \"body\": { \"contentType\": \"html\", \"content\": \"<p>Your <strong>formatted</strong> reply here</p>\" } } }. The full HTML email thread is automatically included below your reply by the Graph API."
+    "llmTip": "Create a reply-all draft (does not send). PREFERRED APPROACH: Use the 'Comment' field with HTML — it supports full HTML rendering (bold, italics, links all work) AND automatically appends the full original thread with Outlook separator. Do NOT use Message.body, as it replaces the entire body and wipes the thread. Example: { \"Comment\": \"<p>Your <strong>formatted</strong> reply here</p>\" }."
   },
   {
     "pathPattern": "/me/messages/{message-id}/send",
