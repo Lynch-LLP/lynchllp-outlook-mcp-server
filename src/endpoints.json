@@ -1811,5 +1811,272 @@
     "method": "get",
     "toolName": "get-my-meeting-attendance-report",
     "workScopes": ["OnlineMeetings.Read"]
+  },
+
+  {
+    "pathPattern": "/planner/plans",
+    "method": "post",
+    "toolName": "create-planner-plan",
+    "workScopes": ["Tasks.ReadWrite"],
+    "llmTip": "Create a new Planner plan. Body requires: { title: 'Plan Name', owner: '<group-id>' }. The owner must be a Microsoft 365 group ID. Use list-groups to find group IDs."
+  },
+  {
+    "pathPattern": "/planner/plans/{plannerPlan-id}",
+    "method": "patch",
+    "toolName": "update-planner-plan",
+    "workScopes": ["Tasks.ReadWrite"],
+    "llmTip": "Update a Planner plan. Requires If-Match header with the plan ETag (use get-planner-plan to retrieve it). Body: { title: 'New Title' }."
+  },
+  {
+    "pathPattern": "/planner/plans/{plannerPlan-id}",
+    "method": "delete",
+    "toolName": "delete-planner-plan",
+    "workScopes": ["Tasks.ReadWrite"],
+    "llmTip": "Delete a Planner plan. Requires If-Match header with the plan ETag (use get-planner-plan to retrieve it). This permanently deletes the plan and all its tasks and buckets."
+  },
+
+  {
+    "pathPattern": "/solutions/bookingBusinesses",
+    "method": "get",
+    "toolName": "list-booking-businesses",
+    "workScopes": ["Bookings.Read.All"],
+    "llmTip": "List all Microsoft Bookings businesses in the organization. Returns business name, phone, email, and scheduling URL."
+  },
+  {
+    "pathPattern": "/solutions/bookingBusinesses",
+    "method": "post",
+    "toolName": "create-booking-business",
+    "workScopes": ["Bookings.ReadWrite.All"],
+    "llmTip": "Create a new Microsoft Bookings business. Body: { displayName: 'Business Name', businessType: 'law firm', phone: '...', email: '...', address: {...} }."
+  },
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}",
+    "method": "get",
+    "toolName": "get-booking-business",
+    "workScopes": ["Bookings.Read.All"],
+    "llmTip": "Get details of a specific Bookings business including settings, hours, and scheduling policies. Use list-booking-businesses to find the business ID."
+  },
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}",
+    "method": "patch",
+    "toolName": "update-booking-business",
+    "workScopes": ["Bookings.ReadWrite.All"],
+    "llmTip": "Update Bookings business settings such as displayName, phone, email, businessHours, schedulingPolicy, or defaultCurrencyIso."
+  },
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}",
+    "method": "delete",
+    "toolName": "delete-booking-business",
+    "workScopes": ["Bookings.ReadWrite.All"]
+  },
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/publish",
+    "method": "post",
+    "toolName": "publish-booking-business",
+    "workScopes": ["Bookings.ReadWrite.All"],
+    "llmTip": "Publish the Bookings business scheduling page to make it publicly accessible for client self-booking."
+  },
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/unpublish",
+    "method": "post",
+    "toolName": "unpublish-booking-business",
+    "workScopes": ["Bookings.ReadWrite.All"],
+    "llmTip": "Unpublish the Bookings business scheduling page to hide it from clients."
+  },
+
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/appointments",
+    "method": "get",
+    "toolName": "list-booking-appointments",
+    "workScopes": ["Bookings.Read.All"],
+    "llmTip": "List all appointments for a Bookings business. Supports $filter, $top, $skip. Filter by date range: $filter=startDateTime/dateTime ge '2024-01-01T00:00:00Z'."
+  },
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/appointments",
+    "method": "post",
+    "toolName": "create-booking-appointment",
+    "workScopes": ["Bookings.ReadWrite.All"],
+    "llmTip": "Create a new appointment. Body requires: { serviceId, staffMemberIds, start: { dateTime, timeZone }, end: { dateTime, timeZone }, customerName, customerEmailAddress }."
+  },
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/appointments/{bookingAppointment-id}",
+    "method": "get",
+    "toolName": "get-booking-appointment",
+    "workScopes": ["Bookings.Read.All"],
+    "llmTip": "Get details of a specific appointment including customer info, service, staff, and time."
+  },
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/appointments/{bookingAppointment-id}",
+    "method": "patch",
+    "toolName": "update-booking-appointment",
+    "workScopes": ["Bookings.ReadWrite.All"],
+    "llmTip": "Update an appointment. Can change start/end time, staff member, customer notes, or other appointment details."
+  },
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/appointments/{bookingAppointment-id}",
+    "method": "delete",
+    "toolName": "delete-booking-appointment",
+    "workScopes": ["Bookings.ReadWrite.All"]
+  },
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/appointments/{bookingAppointment-id}/cancel",
+    "method": "post",
+    "toolName": "cancel-booking-appointment",
+    "workScopes": ["Bookings.ReadWrite.All"],
+    "llmTip": "Cancel an appointment with an optional cancellation message sent to the customer. Body: { cancellationMessage: 'Reason for cancellation' }."
+  },
+
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/calendarView",
+    "method": "get",
+    "toolName": "get-booking-calendar-view",
+    "workScopes": ["Bookings.Read.All"],
+    "llmTip": "Get appointments within a date range. Required query params: start (ISO 8601 datetime) and end (ISO 8601 datetime). Example: ?start=2024-01-01T00:00:00Z&end=2024-01-31T23:59:59Z."
+  },
+
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/services",
+    "method": "get",
+    "toolName": "list-booking-services",
+    "workScopes": ["Bookings.Read.All"],
+    "llmTip": "List all services offered by the Bookings business (e.g., consultation types, meeting durations, pricing). Service IDs are needed when creating appointments."
+  },
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/services",
+    "method": "post",
+    "toolName": "create-booking-service",
+    "workScopes": ["Bookings.ReadWrite.All"],
+    "llmTip": "Create a new service offering. Body: { displayName, defaultDuration (ISO 8601, e.g. 'PT1H'), defaultPrice, schedulingPolicy, staffMemberIds }."
+  },
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/services/{bookingService-id}",
+    "method": "get",
+    "toolName": "get-booking-service",
+    "workScopes": ["Bookings.Read.All"],
+    "llmTip": "Get details of a specific service including duration, price, staff, and scheduling policy."
+  },
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/services/{bookingService-id}",
+    "method": "patch",
+    "toolName": "update-booking-service",
+    "workScopes": ["Bookings.ReadWrite.All"],
+    "llmTip": "Update a service offering (name, duration, price, description, staff assignments, scheduling policy)."
+  },
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/services/{bookingService-id}",
+    "method": "delete",
+    "toolName": "delete-booking-service",
+    "workScopes": ["Bookings.ReadWrite.All"]
+  },
+
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/staffMembers",
+    "method": "get",
+    "toolName": "list-booking-staff-members",
+    "workScopes": ["Bookings.Read.All"],
+    "llmTip": "List all staff members configured in the Bookings business. Returns name, email, role, and availability. Staff IDs are needed when creating appointments."
+  },
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/staffMembers",
+    "method": "post",
+    "toolName": "create-booking-staff-member",
+    "workScopes": ["Bookings.ReadWrite.All"],
+    "llmTip": "Add a staff member to the Bookings business. Body: { displayName, emailAddress, role: 'staff' | 'administrator', sendConfirmationToStaff, workingHours }."
+  },
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/staffMembers/{bookingStaffMemberBase-id}",
+    "method": "get",
+    "toolName": "get-booking-staff-member",
+    "workScopes": ["Bookings.Read.All"],
+    "llmTip": "Get details of a specific staff member including their role, availability, and working hours."
+  },
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/staffMembers/{bookingStaffMemberBase-id}",
+    "method": "patch",
+    "toolName": "update-booking-staff-member",
+    "workScopes": ["Bookings.ReadWrite.All"],
+    "llmTip": "Update a staff member's details such as display name, availability, working hours, or role."
+  },
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/staffMembers/{bookingStaffMemberBase-id}",
+    "method": "delete",
+    "toolName": "delete-booking-staff-member",
+    "workScopes": ["Bookings.ReadWrite.All"]
+  },
+
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/customers",
+    "method": "get",
+    "toolName": "list-booking-customers",
+    "workScopes": ["Bookings.Read.All"],
+    "llmTip": "List all customers in the Bookings business. Returns customer name, email, and phone number."
+  },
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/customers",
+    "method": "post",
+    "toolName": "create-booking-customer",
+    "workScopes": ["Bookings.ReadWrite.All"],
+    "llmTip": "Create a new customer record. Body: { displayName, emailAddress, phone, notes }."
+  },
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/customers/{bookingCustomerBase-id}",
+    "method": "get",
+    "toolName": "get-booking-customer",
+    "workScopes": ["Bookings.Read.All"],
+    "llmTip": "Get details of a specific customer including contact information and appointment history."
+  },
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/customers/{bookingCustomerBase-id}",
+    "method": "patch",
+    "toolName": "update-booking-customer",
+    "workScopes": ["Bookings.ReadWrite.All"],
+    "llmTip": "Update a customer's contact information (name, email, phone, notes)."
+  },
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/customers/{bookingCustomerBase-id}",
+    "method": "delete",
+    "toolName": "delete-booking-customer",
+    "workScopes": ["Bookings.ReadWrite.All"]
+  },
+
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/customQuestions",
+    "method": "get",
+    "toolName": "list-booking-custom-questions",
+    "workScopes": ["Bookings.Read.All"],
+    "llmTip": "List custom questions configured for appointment booking forms."
+  },
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/customQuestions",
+    "method": "post",
+    "toolName": "create-booking-custom-question",
+    "workScopes": ["Bookings.ReadWrite.All"],
+    "llmTip": "Create a custom question for appointment booking. Body: { displayName: 'Question text', answerInputType: 'text' | 'radioButton' | 'unknownFutureValue', answerOptions: [] }."
+  },
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/customQuestions/{bookingCustomQuestion-id}",
+    "method": "get",
+    "toolName": "get-booking-custom-question",
+    "workScopes": ["Bookings.Read.All"]
+  },
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/customQuestions/{bookingCustomQuestion-id}",
+    "method": "patch",
+    "toolName": "update-booking-custom-question",
+    "workScopes": ["Bookings.ReadWrite.All"]
+  },
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/customQuestions/{bookingCustomQuestion-id}",
+    "method": "delete",
+    "toolName": "delete-booking-custom-question",
+    "workScopes": ["Bookings.ReadWrite.All"]
+  },
+
+  {
+    "pathPattern": "/solutions/bookingBusinesses/{bookingBusiness-id}/getStaffAvailability",
+    "method": "post",
+    "toolName": "get-booking-staff-availability",
+    "workScopes": ["Bookings.Read.All"],
+    "llmTip": "Get available time slots for staff members. Body: { staffIds: ['...'], startDateTime: { dateTime, timeZone }, endDateTime: { dateTime, timeZone } }."
   }
 ]
