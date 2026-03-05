@@ -1814,6 +1814,64 @@
   },
 
   {
+    "pathPattern": "/planner/tasks",
+    "method": "get",
+    "toolName": "list-all-planner-tasks",
+    "workScopes": ["Tasks.Read"],
+    "llmTip": "List ALL Planner tasks across the entire tenant (admin-level view). Unlike list-planner-tasks which only returns tasks assigned to you, this returns all tasks. Supports $filter, $top, $orderby."
+  },
+  {
+    "pathPattern": "/planner/buckets",
+    "method": "get",
+    "toolName": "list-all-planner-buckets",
+    "workScopes": ["Tasks.Read"],
+    "llmTip": "List ALL Planner buckets across the entire tenant. Supports $filter, $top, $orderby."
+  },
+
+  {
+    "pathPattern": "/groups/{group-id}/planner/plans",
+    "method": "post",
+    "toolName": "create-group-planner-plan",
+    "workScopes": ["Tasks.ReadWrite"],
+    "llmTip": "Create a Planner plan owned by a specific Microsoft 365 group. Body: { title: 'Plan Name' }. The group-id in the path sets the plan owner. Use list-groups to find group IDs."
+  },
+  {
+    "pathPattern": "/groups/{group-id}/planner/plans/{plannerPlan-id}",
+    "method": "get",
+    "toolName": "get-group-planner-plan",
+    "workScopes": ["Tasks.Read"],
+    "llmTip": "Get a specific Planner plan scoped to a Microsoft 365 group. Use list-group-planner-plans to find plan IDs within a group."
+  },
+  {
+    "pathPattern": "/groups/{group-id}/planner/plans/{plannerPlan-id}",
+    "method": "patch",
+    "toolName": "update-group-planner-plan",
+    "workScopes": ["Tasks.ReadWrite"],
+    "llmTip": "Update a Planner plan within a group. Requires If-Match header with the plan ETag. Body: { title: 'New Title' }."
+  },
+  {
+    "pathPattern": "/groups/{group-id}/planner/plans/{plannerPlan-id}",
+    "method": "delete",
+    "toolName": "delete-group-planner-plan",
+    "workScopes": ["Tasks.ReadWrite"],
+    "llmTip": "Delete a Planner plan within a group. Requires If-Match header with the plan ETag."
+  },
+  {
+    "pathPattern": "/groups/{group-id}/planner/plans/{plannerPlan-id}/tasks",
+    "method": "get",
+    "toolName": "list-group-plan-tasks",
+    "workScopes": ["Tasks.Read"],
+    "llmTip": "List all tasks in a Planner plan scoped to a specific group. Supports $filter, $top, $orderby, $select."
+  },
+  {
+    "pathPattern": "/groups/{group-id}/planner/plans/{plannerPlan-id}/tasks",
+    "method": "post",
+    "toolName": "create-group-plan-task",
+    "workScopes": ["Tasks.ReadWrite"],
+    "llmTip": "Create a task in a Planner plan within a group. Body: { title: 'Task Name', planId: '...', bucketId: '...', assignments: {}, dueDateTime: '...' }."
+  },
+
+  {
     "pathPattern": "/planner/plans",
     "method": "post",
     "toolName": "create-planner-plan",
