@@ -45,6 +45,21 @@ function parseHttpOption(httpOption: string | boolean): { host: string | undefin
   return { host: undefined, port };
 }
 
+/**
+ * Extracts the email/UPN from a JWT access token without verifying the signature.
+ * We trust the token content because it was just issued by Microsoft's token endpoint.
+ */
+function getEmailFromJwt(token: string): string | null {
+  try {
+    const payload = token.split('.')[1];
+    if (!payload) return null;
+    const decoded = JSON.parse(Buffer.from(payload, 'base64url').toString('utf8'));
+    return decoded.preferred_username || decoded.upn || decoded.email || null;
+  } catch {
+    return null;
+  }
+}
+
 class MicrosoftGraphServer {
   private authManager: AuthManager;
   private options: CommandOptions;
@@ -350,6 +365,22 @@ class MicrosoftGraphServer {
               body.code_verifier as string | undefined,
               this.secrets!.cloudType
             );
+
+            // Restrict access to the allowed email domain
+            const allowedDomain = (process.env.MS365_MCP_ALLOWED_DOMAIN || 'lynchllp.com').toLowerCase();
+            const email = getEmailFromJwt(result.access_token);
+            if (!email || !email.toLowerCase().endsWith(`@${allowedDomain}`)) {
+              logger.warn(
+                `Access denied: account '${email || 'unknown'}' is not in allowed domain @${allowedDomain}`
+              );
+              res.status(403).json({
+                error: 'access_denied',
+                error_description: `Access restricted to @${allowedDomain} accounts`,
+              });
+              return;
+            }
+
+            logger.info(`Access granted for account: ${email}`);
             res.json(result);
           } else if (body.grant_type === 'refresh_token') {
             const tenantId = this.secrets?.tenantId || 'common';
