@@ -2780,5 +2780,86 @@
       "Bookings.Read.All"
     ],
     "llmTip": "Get available time slots for staff members. Body: { staffIds: ['...'], startDateTime: { dateTime, timeZone }, endDateTime: { dateTime, timeZone } }."
+  },
+  {
+    "pathPattern": "/me/planner/plans",
+    "method": "get",
+    "toolName": "list_planner_plans",
+    "workScopes": [
+      "Tasks.Read"
+    ],
+    "llmTip": "List all Planner plans the current user has access to. Returns plan ID, title, owner (group ID), and creation info. Use get_planner_plan to get details of a specific plan, or list_planner_buckets to see its buckets."
+  },
+  {
+    "pathPattern": "/planner/plans/{plannerPlan-id}",
+    "method": "get",
+    "toolName": "get_planner_plan",
+    "workScopes": [
+      "Tasks.Read"
+    ],
+    "llmTip": "Get details of a specific Planner plan by ID, including title, owner group ID, and creation info. Use list_planner_buckets to list the plan's buckets, and list_planner_tasks to list its tasks."
+  },
+  {
+    "pathPattern": "/planner/plans/{plannerPlan-id}/buckets",
+    "method": "get",
+    "toolName": "list_planner_buckets",
+    "workScopes": [
+      "Tasks.Read"
+    ],
+    "llmTip": "List all buckets in a Planner plan. Returns bucket ID, name, planId, and orderHint. Use the bucket ID with list_planner_tasks ($filter by bucketId) or create_planner_task to assign tasks to a specific bucket."
+  },
+  {
+    "pathPattern": "/planner/plans/{plannerPlan-id}/tasks",
+    "method": "get",
+    "toolName": "list_planner_tasks",
+    "workScopes": [
+      "Tasks.Read"
+    ],
+    "llmTip": "List all tasks in a specific Planner plan. Supports $filter to narrow results \u2014 e.g., $filter=\"percentComplete eq 0\" for incomplete tasks, or $filter=\"assignments/any(a:a/userId eq 'USER_ID')\" for a specific assignee. Returns task ID, title, bucketId, assignments, dueDateTime, percentComplete, and priority (0=unset, 1=urgent, 3=important, 5=medium, 9=low)."
+  },
+  {
+    "pathPattern": "/planner/tasks/{plannerTask-id}",
+    "method": "get",
+    "toolName": "get_planner_task",
+    "workScopes": [
+      "Tasks.Read"
+    ],
+    "llmTip": "Get a Planner task by ID. Returns title, bucketId, planId, assignments, dueDateTime, percentComplete, priority, and startDateTime. NOTE: Description, checklist items, and references are stored separately \u2014 call get-planner-task-details with the same taskId to retrieve them. Use includeHeaders=true to get the ETag needed for update_planner_task."
+  },
+  {
+    "pathPattern": "/planner/tasks",
+    "method": "post",
+    "toolName": "create_planner_task",
+    "workScopes": [
+      "Tasks.ReadWrite"
+    ],
+    "llmTip": "Create a new Planner task. Required body fields: { \"planId\": \"<plan-id>\", \"title\": \"Task Title\" }. Optional: \"bucketId\", \"dueDateTime\" (ISO 8601 UTC), \"startDateTime\", \"percentComplete\" (0-100), \"priority\" (0=unset, 1=urgent, 3=important, 5=medium, 9=low), \"assignments\": { \"<userId>\": { \"@odata.type\": \"#microsoft.graph.plannerAssignment\", \"orderHint\": \" !\" } }. Use list_planner_plans to find planId, and list_planner_buckets to find bucketId."
+  },
+  {
+    "pathPattern": "/planner/tasks/{plannerTask-id}",
+    "method": "patch",
+    "toolName": "update_planner_task",
+    "workScopes": [
+      "Tasks.ReadWrite"
+    ],
+    "llmTip": "Update a Planner task. REQUIRES If-Match header with the task's ETag \u2014 first call get_planner_task with includeHeaders=true to retrieve the ETag, then pass it as the If-Match header value. Updatable fields: \"title\", \"bucketId\", \"dueDateTime\" (ISO 8601 UTC or null), \"startDateTime\", \"percentComplete\" (0-100), \"priority\" (0=unset, 1=urgent, 3=important, 5=medium, 9=low), \"assignments\". To update description or checklist, use update_planner_task_details instead."
+  },
+  {
+    "pathPattern": "/planner/tasks/{plannerTask-id}",
+    "method": "delete",
+    "toolName": "delete_planner_task",
+    "workScopes": [
+      "Tasks.ReadWrite"
+    ],
+    "llmTip": "Delete a Planner task permanently. REQUIRES If-Match header with the task's ETag \u2014 first call get_planner_task with includeHeaders=true to retrieve the ETag, then pass it as the If-Match header value."
+  },
+  {
+    "pathPattern": "/planner/tasks/{plannerTask-id}/details",
+    "method": "patch",
+    "toolName": "update_planner_task_details",
+    "workScopes": [
+      "Tasks.ReadWrite"
+    ],
+    "llmTip": "Update a Planner task's description, checklist, and references. REQUIRES If-Match header with the task details ETag \u2014 first call get-planner-task-details with includeHeaders=true, then pass the ETag as If-Match. Body fields: \"description\" (plain text), \"checklist\": { \"<guid>\": { \"@odata.type\": \"#microsoft.graph.plannerChecklistItem\", \"title\": \"Item\", \"isChecked\": false, \"orderHint\": \" !\" } } \u2014 use null for a checklist item GUID to delete it."
   }
 ]
