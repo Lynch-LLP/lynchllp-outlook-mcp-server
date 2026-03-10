@@ -432,6 +432,10 @@ export function registerGraphTools(
   const allEndpoints = api.endpoints;
   for (const tool of allEndpoints) {
     const endpointConfig = endpointsData.find((e) => e.toolName === tool.alias);
+    if (!endpointConfig) {
+      skippedCount++;
+      continue;
+    }
     if (!orgMode && endpointConfig && !endpointConfig.scopes && endpointConfig.workScopes) {
       logger.info(`Skipping work account tool ${tool.alias} - not in org mode`);
       skippedCount++;
