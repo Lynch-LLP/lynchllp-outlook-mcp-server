@@ -40,7 +40,7 @@
     "scopes": [
       "Mail.Send"
     ],
-    "llmTip": "CRITICAL: Do not try to guess the email address of the recipients. Use the list-users tool to find the email address of the recipients."
+    "llmTip": "CRITICAL: Do not try to guess the email address of the recipients. Use the search-query tool (entityTypes: [\"person\"]) to find email addresses."
   },
   {
     "pathPattern": "/me/messages",
@@ -144,7 +144,7 @@
     "scopes": [
       "Calendars.ReadWrite"
     ],
-    "llmTip": "CRITICAL: Do not try to guess the email address of the recipients. Use the list-users tool to find the email address of the recipients."
+    "llmTip": "CRITICAL: Do not try to guess the email address of the recipients. Use the search-query tool (entityTypes: [\"person\"]) to find email addresses."
   },
   {
     "pathPattern": "/me/planner/tasks",
