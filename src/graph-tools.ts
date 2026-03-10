@@ -3,7 +3,6 @@ import logger from './logger.js';
 import GraphClient from './graph-client.js';
 import AuthManager from './auth.js';
 import { api } from './generated/client.js';
-import { plannerAliasEndpoints } from './planner-aliases.js';
 import { z } from 'zod';
 import { readFileSync } from 'fs';
 import path from 'path';
@@ -430,7 +429,7 @@ export function registerGraphTools(
   let skippedCount = 0;
   let failedCount = 0;
 
-  const allEndpoints = [...api.endpoints, ...plannerAliasEndpoints];
+  const allEndpoints = api.endpoints;
   for (const tool of allEndpoints) {
     const endpointConfig = endpointsData.find((e) => e.toolName === tool.alias);
     if (!orgMode && endpointConfig && !endpointConfig.scopes && endpointConfig.workScopes) {
@@ -563,7 +562,7 @@ function buildToolsRegistry(
     { tool: (typeof api.endpoints)[0]; config: EndpointConfig | undefined }
   >();
 
-  for (const tool of [...api.endpoints, ...plannerAliasEndpoints]) {
+  for (const tool of api.endpoints) {
     const endpointConfig = endpointsData.find((e) => e.toolName === tool.alias);
 
     if (!orgMode && endpointConfig && !endpointConfig.scopes && endpointConfig.workScopes) {
