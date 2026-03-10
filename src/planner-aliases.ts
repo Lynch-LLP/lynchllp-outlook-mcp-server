@@ -66,6 +66,7 @@ export const plannerAliasEndpoints: Endpoint[] = [
     description: 'Get details of a specific Planner plan including title and owner group ID.',
     requestFormat: 'json',
     parameters: [
+      { name: 'plannerPlanId', type: 'Path', schema: z.string().describe('The Planner plan ID.') },
       { name: '$select', type: 'Query', schema: z.array(z.string()).describe('Select properties to be returned').optional() },
       { name: '$expand', type: 'Query', schema: z.array(z.string()).describe('Expand related entities').optional() },
     ],
@@ -78,6 +79,7 @@ export const plannerAliasEndpoints: Endpoint[] = [
     description: 'List all buckets in a Planner plan. Returns bucket ID, name, and orderHint.',
     requestFormat: 'json',
     parameters: [
+      { name: 'plannerPlanId', type: 'Path', schema: z.string().describe('The Planner plan ID.') },
       { name: '$top', type: 'Query', schema: z.number().int().gte(0).describe('Show only the first n items').optional() },
       { name: '$filter', type: 'Query', schema: z.string().describe('Filter items by property values').optional() },
       { name: '$select', type: 'Query', schema: z.array(z.string()).describe('Select properties to be returned').optional() },
@@ -93,6 +95,7 @@ export const plannerAliasEndpoints: Endpoint[] = [
       'List all tasks in a Planner plan. Supports $filter for assignee (assignments/any(a:a/userId eq \'USER_ID\')) and completion status (percentComplete eq 0). Returns task ID, title, bucketId, assignee, dueDateTime, percentComplete, and priority.',
     requestFormat: 'json',
     parameters: [
+      { name: 'plannerPlanId', type: 'Path', schema: z.string().describe('The Planner plan ID.') },
       { name: '$top', type: 'Query', schema: z.number().int().gte(0).describe('Show only the first n items').optional() },
       { name: '$skip', type: 'Query', schema: z.number().int().gte(0).describe('Skip the first n items').optional() },
       {
@@ -118,6 +121,7 @@ export const plannerAliasEndpoints: Endpoint[] = [
       'Get a Planner task by ID. Returns title, bucketId, planId, assignments, dueDateTime, percentComplete, and priority. NOTE: Call get-planner-task-details for description and checklist. Use includeHeaders=true to get the ETag for update_planner_task.',
     requestFormat: 'json',
     parameters: [
+      { name: 'plannerTaskId', type: 'Path', schema: z.string().describe('The Planner task ID.') },
       { name: '$select', type: 'Query', schema: z.array(z.string()).describe('Select properties to be returned').optional() },
       { name: '$expand', type: 'Query', schema: z.array(z.string()).describe('Expand related entities').optional() },
     ],
@@ -148,6 +152,7 @@ export const plannerAliasEndpoints: Endpoint[] = [
       'Update a Planner task. REQUIRES If-Match header with the task ETag — call get_planner_task with includeHeaders=true first. Supports: title, bucketId, dueDateTime, startDateTime, percentComplete, priority, assignments.',
     requestFormat: 'json',
     parameters: [
+      { name: 'plannerTaskId', type: 'Path', schema: z.string().describe('The Planner task ID.') },
       {
         name: 'body',
         description: 'Task fields to update.',
@@ -172,6 +177,7 @@ export const plannerAliasEndpoints: Endpoint[] = [
       'Delete a Planner task permanently. REQUIRES If-Match header with the task ETag — call get_planner_task with includeHeaders=true first.',
     requestFormat: 'json',
     parameters: [
+      { name: 'plannerTaskId', type: 'Path', schema: z.string().describe('The Planner task ID.') },
       {
         name: 'If-Match',
         type: 'Header',
@@ -190,6 +196,7 @@ export const plannerAliasEndpoints: Endpoint[] = [
       'Update task description, checklist items, and references. REQUIRES If-Match header from get-planner-task-details with includeHeaders=true. Body: { description, checklist, references }.',
     requestFormat: 'json',
     parameters: [
+      { name: 'plannerTaskId', type: 'Path', schema: z.string().describe('The Planner task ID.') },
       {
         name: 'body',
         description:

@@ -20,4 +20,6 @@ ENV NODE_ENV=production
 RUN npm i --ignore-scripts --omit=dev
 
 # Use shell form so ${PORT:-3000} is expanded at runtime
-CMD node dist/index.js --http ${PORT:-3000} --enable-dynamic-registration
+# --org-mode enables Planner tools (workScopes: Tasks.Read/ReadWrite) and includes
+# Planner scopes in OAuth discovery so tokens include the necessary permissions.
+CMD node dist/index.js --http ${PORT:-3000} --enable-dynamic-registration --org-mode
