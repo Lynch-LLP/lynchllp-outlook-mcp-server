@@ -71,7 +71,7 @@ function removeODataTypeRecursively(obj) {
   }
 
   Object.keys(obj).forEach((key) => {
-    if (key === '@odata.type') {
+    if (key.startsWith('@')) {
       delete obj[key];
     } else {
       removeODataTypeRecursively(obj[key]);
